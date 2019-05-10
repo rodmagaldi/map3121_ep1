@@ -7,6 +7,10 @@
 #include "MatrixbEx1a.h"
 #include "MatrixxEx1a.h"
 
+#include "MatrixEx1b.h"
+#include "MatrixbEx1b.h"
+#include "MatrixxEx1b.h"
+
 #define CASAS_DECIMAIS 3
 
 using namespace std;
@@ -40,6 +44,10 @@ void exercicioUmB() {
     MatrixEx1b* w = new MatrixEx1b(CASAS_DECIMAIS);
     MatrixbEx1b* b = new MatrixbEx1b(CASAS_DECIMAIS);
     MatrixxEx1b* x = new MatrixxEx1b(CASAS_DECIMAIS);
+
+    w->print();
+    b->print();
+    x->print();
 
     w->fatoracaoQR(b);
     w->resolveSistema(b, x);
