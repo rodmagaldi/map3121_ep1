@@ -28,6 +28,8 @@ class Matrix
         //metodo usado para resolver o sistema Wx = b
         void resolveSistema(Matrix* b, Matrix* x);
 
+        Matrix* multiplica(Matrix* m);
+
         //metodo para printar this->matriz
         void print();
 

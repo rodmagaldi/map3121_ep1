@@ -151,3 +151,21 @@ void Matrix::resolveSistema(Matrix* b, Matrix* x) {
         x->matriz[k][0] /= this->matriz[k][k];
     }
 }
+
+Matrix* Matrix::multiplica(Matrix* m) {
+    Matrix* resolvida = new Matrix(this->nLinhas, m->getNColunas(), this->precisao);
+
+    for (int i=0; i<resolvida->getNLinhas(); i++) {
+        vector<double> temp;
+        for (int j=0; j<resolvida->getNColunas(); j++) {
+            double soma = 0;
+            for (int k=0; k<this->getNColunas(); k++) {
+                soma += this->matriz[i][k] * m->matriz[k][j];
+            }
+            temp.push_back(soma);
+        }
+        resolvida->matriz.push_back(temp);
+    }
+
+    return resolvida;
+}

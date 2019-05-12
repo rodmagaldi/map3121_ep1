@@ -11,14 +11,14 @@
 	"MatrixbEx1b.h"
 	"MatrixxEx1b.h"
 
-1557519820 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrix.cpp
+1557627212 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrix.cpp
 	"Matrix.h"
 	<iostream>
 	<string>
 	<math.h>
 	<bits/stdc++.h>
 
-1557519758 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrix.h
+1557626633 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrix.h
 	<vector>
 
 1557512121 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixex1a.h
@@ -48,7 +48,7 @@
 1557518371 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixxex1a.h
 	"Matrix.h"
 
-1557528154 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixex1b.cpp
+1557528570 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixex1b.cpp
 	<iostream>
 	"MatrixEx1b.h"
 	"Matrix.h"

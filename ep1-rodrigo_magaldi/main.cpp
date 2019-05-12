@@ -11,7 +11,7 @@
 #include "MatrixbEx1b.h"
 #include "MatrixxEx1b.h"
 
-#define CASAS_DECIMAIS 3
+#define CASAS_DECIMAIS 6
 
 using namespace std;
 
@@ -30,6 +30,10 @@ void exercicioUmA() {
     w->print();
     b->print();
     x->print();
+
+    Matrix* a = w->multiplica(x);
+
+    a->print();
 
     delete w;
     delete x;
@@ -56,6 +60,10 @@ void exercicioUmB() {
     b->print();
     x->print();
 
+    Matrix* a = w->multiplica(x);
+
+    a->print();
+
     delete w;
     delete x;
     delete b;
@@ -64,7 +72,7 @@ void exercicioUmB() {
 int main() {
 
     //exercicioUmA();
-    exercicioUmB();
+    //exercicioUmB();
 
     return 0;
 }
