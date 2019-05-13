@@ -69,10 +69,18 @@ void exercicioUmB() {
     delete b;
 }
 
+void exercicioUmC() {
+
+
+
+}
+
 int main() {
 
     //exercicioUmA();
     //exercicioUmB();
+
+    exercicioUmC();
 
     return 0;
 }

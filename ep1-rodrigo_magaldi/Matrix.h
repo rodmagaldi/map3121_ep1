@@ -27,11 +27,15 @@ class Matrix
 
         //metodo usado para resolver o sistema Wx = b
         void resolveSistema(Matrix* b, Matrix* x);
+        void resolveMultiplosSistemas(Matrix* a, Matrix* h);
 
         Matrix* multiplica(Matrix* m);
 
         //metodo para printar this->matriz
         void print();
+
+        //a matriz de fato, inicializada como vector
+        vector< vector<double> > matriz;
 
     protected:
         //numero de linhas e colunas do objeto matrix
@@ -39,9 +43,6 @@ class Matrix
 
         //numero de casas decimais a serem utilizadas
         int precisao;
-
-        //a matriz de fato, inicializada como vector
-        vector< vector<double> > matriz;
 
         //metodo aplicado apenas dentro de fatoracaoQR, nao precisa ser publico
         void rotGivens(int, int, double, double);
