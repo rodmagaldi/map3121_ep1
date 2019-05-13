@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1557772355 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\main.cpp
+1557777117 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\main.cpp
 	<iostream>
 	<vector>
 	<math.h>
@@ -10,8 +10,11 @@
 	"MatrixEx1b.h"
 	"MatrixbEx1b.h"
 	"MatrixxEx1b.h"
+	"MatrixwEx1c.h"
+	"MatrixaEx1c.h"
+	"MatrixhEx1c.h"
 
-1557628278 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrix.cpp
+1557772408 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrix.cpp
 	"Matrix.h"
 	<iostream>
 	<string>
@@ -71,5 +74,27 @@
 	"math.h"
 
 1557524051 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixxex1b.h
+	"Matrix.h"
+
+1557776236 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixwex1c.cpp
+	"MatrixwEx1c.h"
+	<iostream>
+	"math.h"
+
+1557775890 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixwex1c.h
+	"Matrix.h"
+
+1557777209 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixaex1c.cpp
+	"MatrixaEx1c.h"
+	<iostream>
+	"math.h"
+
+1557776615 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixaex1c.h
+	"Matrix.h"
+
+1557776948 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixhex1c.cpp
+	"MatrixhEx1c.h"
+
+1557776947 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixhex1c.h
 	"Matrix.h"
 

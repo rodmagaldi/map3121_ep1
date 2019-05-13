@@ -11,7 +11,11 @@
 #include "MatrixbEx1b.h"
 #include "MatrixxEx1b.h"
 
-#define CASAS_DECIMAIS 6
+#include "MatrixwEx1c.h"
+#include "MatrixaEx1c.h"
+#include "MatrixhEx1c.h"
+
+#define CASAS_DECIMAIS 3
 
 using namespace std;
 
@@ -60,18 +64,39 @@ void exercicioUmB() {
     b->print();
     x->print();
 
-    Matrix* a = w->multiplica(x);
-
-    a->print();
+    Matrix* mult = w->multiplica(x);
+    mult->print();
 
     delete w;
     delete x;
     delete b;
+    delete mult;
 }
 
 void exercicioUmC() {
 
+    MatrixwEx1c* w = new MatrixwEx1c(CASAS_DECIMAIS);
+    MatrixaEx1c* a = new MatrixaEx1c(CASAS_DECIMAIS);
+    MatrixhEx1c* h = new MatrixhEx1c(CASAS_DECIMAIS);
 
+    w->print();
+    a->print();
+    h->print();
+
+    w->fatoracaoQR(a);
+    w->resolveMultiplosSistemas(a, h);
+
+    w->print();
+    a->print();
+    h->print();
+
+    Matrix* mult = w->multiplica(h);
+    mult->print();
+
+    delete w;
+    delete a;
+    delete h;
+    delete mult;
 
 }
 
