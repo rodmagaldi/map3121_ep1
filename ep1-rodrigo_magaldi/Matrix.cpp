@@ -184,9 +184,9 @@ Matrix* Matrix::multiplica(Matrix* m) {
 
 Matrix* Matrix::transpoe() {
     Matrix* transposta = new Matrix(this->nColunas, this->nLinhas, this->precisao);
-    for (int i=0; i<nLinhas; i++) {
+    for (int i=0; i<transposta->nLinhas; i++) {
         vector<double> temp;
-        for (int j=0; j<nColunas; j++) {
+        for (int j=0; j<transposta->nColunas; j++) {
             temp.push_back(this->matriz[j][i]);
         }
         transposta->matriz.push_back(temp);

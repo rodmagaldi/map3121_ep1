@@ -145,6 +145,9 @@ void exercicioDois() {
     RandomPositiveMatrix* m = new RandomPositiveMatrix(10, 7, CASAS_DECIMAIS);
     m->print();
 
+    Matrix* mt = m->transpoe();
+    mt->print();
+
 }
 
 int main() {
