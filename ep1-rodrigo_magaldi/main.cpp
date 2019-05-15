@@ -19,13 +19,15 @@
 #include "MatrixaEx1d.h"
 #include "MatrixhEx1d.h"
 
+#include "RandomPositiveMatrix.h"
+
 #define CASAS_DECIMAIS 3
 
 using namespace std;
 
 void exercicioUmA() {
 
-    cout << "===== Bem vindo ao exercicio 1a =====" << endl;
+    cout << "===== Bem vindo ao exercicio 1a =====" << endl << endl;
     cout << endl;
 
     MatrixEx1a* w = new MatrixEx1a(CASAS_DECIMAIS);
@@ -50,7 +52,7 @@ void exercicioUmA() {
 
 void exercicioUmB() {
 
-    cout << "===== Bem vindo ao exercicio 1b =====" << endl;
+    cout << "===== Bem vindo ao exercicio 1b =====" << endl << endl;
     cout << endl;
 
     MatrixEx1b* w = new MatrixEx1b(CASAS_DECIMAIS);
@@ -79,7 +81,7 @@ void exercicioUmB() {
 
 void exercicioUmC() {
 
-    cout << "===== Bem vindo ao exercicio 1c =====" << endl;
+    cout << "===== Bem vindo ao exercicio 1c =====" << endl << endl;
     cout << endl;
 
     MatrixwEx1c* w = new MatrixwEx1c(CASAS_DECIMAIS);
@@ -109,7 +111,7 @@ void exercicioUmC() {
 
 void exercicioUmD() {
 
-    cout << "===== Bem vindo ao exercicio 1d =====" << endl;
+    cout << "===== Bem vindo ao exercicio 1d =====" << endl << endl;
     cout << endl;
 
     MatrixwEx1d* w = new MatrixwEx1d(CASAS_DECIMAIS);
@@ -138,14 +140,11 @@ void exercicioUmD() {
 }
 
 void exercicioDois() {
-    MatrixEx1b* m = new MatrixEx1b(CASAS_DECIMAIS);
+    cout << "===== Bem vindo ao exercicio 2 =====" << endl << endl;
+
+    RandomPositiveMatrix* m = new RandomPositiveMatrix(10, 7, CASAS_DECIMAIS);
     m->print();
 
-    Matrix* mt = m->transpoe();
-    mt->print();
-
-    delete m;
-    delete mt;
 }
 
 int main() {
