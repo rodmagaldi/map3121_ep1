@@ -22,7 +22,7 @@ Matrix::Matrix(int linhas, int colunas, int precisao){
 
 //    cout << "Matriz com " << this->nLinhas << " linhas e " << this->nColunas << " colunas: " << endl;
 //    cout << endl;
-
+//
 //    loop que coloca os valores em this->matriz
 //    for (int i=0; i<nLinhas; i++) {
 //
@@ -43,7 +43,7 @@ Matrix::Matrix(int linhas, int colunas, int precisao){
 //
 //        coloca o vetor interno dentro do vetor externo (adiciona linhas a matriz)
 //        matriz.push_back(temp);
-//    }
+//   }
 }
 
 //destrutor
@@ -182,3 +182,15 @@ Matrix* Matrix::multiplica(Matrix* m) {
     return resolvida;
 }
 
+Matrix* Matrix::transpoe() {
+    Matrix* transposta = new Matrix(this->nColunas, this->nLinhas, this->precisao);
+    for (int i=0; i<nLinhas; i++) {
+        vector<double> temp;
+        for (int j=0; j<nColunas; j++) {
+            temp.push_back(this->matriz[j][i]);
+        }
+        transposta->matriz.push_back(temp);
+   }
+
+   return transposta;
+}

@@ -12,6 +12,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 				</Compiler>
 			</Target>
@@ -34,6 +35,30 @@
 		</Compiler>
 		<Unit filename="Matrix.cpp" />
 		<Unit filename="Matrix.h" />
+		<Unit filename="MatrixEx1a.cpp" />
+		<Unit filename="MatrixEx1a.h" />
+		<Unit filename="MatrixEx1b.cpp" />
+		<Unit filename="MatrixEx1b.h" />
+		<Unit filename="MatrixaEx1c.cpp" />
+		<Unit filename="MatrixaEx1c.h" />
+		<Unit filename="MatrixaEx1d.cpp" />
+		<Unit filename="MatrixaEx1d.h" />
+		<Unit filename="MatrixbEx1a.cpp" />
+		<Unit filename="MatrixbEx1a.h" />
+		<Unit filename="MatrixbEx1b.cpp" />
+		<Unit filename="MatrixbEx1b.h" />
+		<Unit filename="MatrixhEx1c.cpp" />
+		<Unit filename="MatrixhEx1c.h" />
+		<Unit filename="MatrixhEx1d.cpp" />
+		<Unit filename="MatrixhEx1d.h" />
+		<Unit filename="MatrixwEx1c.cpp" />
+		<Unit filename="MatrixwEx1c.h" />
+		<Unit filename="MatrixwEx1d.cpp" />
+		<Unit filename="MatrixwEx1d.h" />
+		<Unit filename="MatrixxEx1a.cpp" />
+		<Unit filename="MatrixxEx1a.h" />
+		<Unit filename="MatrixxEx1b.cpp" />
+		<Unit filename="MatrixxEx1b.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

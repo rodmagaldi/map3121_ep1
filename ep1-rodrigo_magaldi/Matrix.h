@@ -29,7 +29,11 @@ class Matrix
         void resolveSistema(Matrix* b, Matrix* x);
         void resolveMultiplosSistemas(Matrix* a, Matrix* h);
 
+        //metodo que multiplica this->matriz por m, retornando a matriz resultado
         Matrix* multiplica(Matrix* m);
+
+        //metodo que transpoe this->matriz, retornando a matriz transposta
+        Matrix* transpoe();
 
         //metodo para printar this->matriz
         void print();

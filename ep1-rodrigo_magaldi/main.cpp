@@ -135,14 +135,27 @@ void exercicioUmD() {
     delete h;
     delete mult;
 
-
 }
+
+void exercicioDois() {
+    MatrixEx1b* m = new MatrixEx1b(CASAS_DECIMAIS);
+    m->print();
+
+    Matrix* mt = m->transpoe();
+    mt->print();
+
+    delete m;
+    delete mt;
+}
+
 int main() {
 
     //exercicioUmA();
     //exercicioUmB();
     //exercicioUmC();
-    exercicioUmD();
+    //exercicioUmD();
+
+    exercicioDois();
 
     return 0;
 }
