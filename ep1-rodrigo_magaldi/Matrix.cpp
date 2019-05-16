@@ -156,7 +156,7 @@ void Matrix::resolveMultiplosSistemas(Matrix* a, Matrix* h) {
     for (int k=this->nColunas-1; k>=0; k--) {
         for (int j=0; j<a->getNColunas(); j++) {
             h->matriz[k][j] = a->matriz[k][j];
-            for (int i=k; i<this->getNColunas(); i++) {
+            for (int i=k+1; i<this->getNColunas(); i++) {
                 h->matriz[k][j] -= this->matriz[k][i] * h->matriz[i][j];
             }
             h->matriz[k][j] /= this->matriz[k][k];

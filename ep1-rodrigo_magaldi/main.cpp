@@ -306,25 +306,9 @@ int main() {
     //exercicioUmC();
     //exercicioUmD();
 
-    //exercicioDois();
+    exercicioDois();
 
     //exercicioTres();
-
-    UserGeneratedMatrix* wAux = new UserGeneratedMatrix(3, 3, 3);
-    Matrix* w = dynamic_cast<Matrix*>(wAux);
-
-    UserGeneratedMatrix* bAux = new UserGeneratedMatrix(3, 1, 3);
-    Matrix* b = dynamic_cast<Matrix*>(bAux);
-
-    NullMatrix* xAux = new NullMatrix(3, 1, 3);
-    Matrix* x = dynamic_cast<Matrix*>(xAux);
-
-    w->fatoracaoQR(b);
-    w->resolveSistema(b, x);
-
-    w->print();
-    b->print();
-    x->print();
 
     return 0;
 }
