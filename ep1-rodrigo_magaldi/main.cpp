@@ -20,8 +20,12 @@
 #include "MatrixhEx1d.h"
 
 #include "RandomPositiveMatrix.h"
+#include "UserGeneratedMatrix.h"
+#include "NullMatrix.h"
 
 #define CASAS_DECIMAIS 3
+#define EPSILON 0.00001
+#define ITMAX 100
 
 using namespace std;
 
@@ -139,15 +143,150 @@ void exercicioUmD() {
 
 }
 
+void auxiliarNormalizaColunas(Matrix* m) {
+
+    for (int j=0; j<m->getNColunas(); j++) {
+
+        double soma = 0;
+
+        for (int i=0; i<m->getNLinhas(); i++) {
+            soma += pow(m->matriz[i][j], 2);
+        }
+        soma = sqrt(soma);
+
+        for (int i=0; i<m->getNLinhas(); i++) {
+            m->matriz[i][j] = m->matriz[i][j]/soma;
+        }
+
+    }
+
+}
+
+void auxiliarTornaPositivo(Matrix* m) {
+    for (int i=0; i<m->getNLinhas(); i++) {
+        for (int j=0; j<m->getNColunas(); j++) {
+            if (m->matriz[i][j] < 0) {
+                m->matriz[i][j] = 0;
+            }
+        }
+    }
+}
+
 void exercicioDois() {
     cout << "===== Bem vindo ao exercicio 2 =====" << endl << endl;
 
-    RandomPositiveMatrix* m = new RandomPositiveMatrix(10, 7, CASAS_DECIMAIS);
-    m->print();
+    int n, m, p;
 
-    Matrix* mt = m->transpoe();
-    mt->print();
+    //escolhe n
+    cout << "Numero de linhas da sua matriz: ";
+    cin >> n;
+    cout << endl;
 
+    //escolhe m
+    cout << "Numero de colunas da sua matriz: ";
+    cin >> m;
+    cout << endl;
+
+    //escolhe um p valido
+    do {
+        cout << "Escolha um valor de p valido (menor que numero de linhas e colunas): ";
+        cin >> p;
+        cout << endl;
+    } while (p>=m || p>=n || p<=0);
+
+    //gera matriz a
+    UserGeneratedMatrix* aAux = new UserGeneratedMatrix(n, m, CASAS_DECIMAIS);
+    Matrix* a = dynamic_cast<Matrix*>(aAux);
+    cout << "A" << endl;
+    a->print();
+
+    //copia matriz a
+    Matrix* aCopia = a->geraCopia();
+    cout << "A COPIA" << endl;
+    aCopia->print();
+
+    //gera matriz aleatoria positiva w
+    RandomPositiveMatrix* wAux = new RandomPositiveMatrix(n, p, CASAS_DECIMAIS);
+    Matrix* w = dynamic_cast<Matrix*>(wAux);
+    cout << "W" << endl;
+    w->print();
+
+    //gera matriz nula h que sera resolvida
+    NullMatrix* hAux = new NullMatrix(p, m, CASAS_DECIMAIS);
+    Matrix* h = dynamic_cast<Matrix*>(hAux);
+    cout << "H" << endl;
+    h->print();
+
+    //inicializa o contador de iteracoes
+    int contador = 0;
+
+    while(contador<ITMAX && aCopia->calculaDiferenca(w->multiplica(h)) > EPSILON ) {
+
+        contador++;
+
+        a = aCopia->geraCopia();
+
+        //normaliza as colunas de w
+        auxiliarNormalizaColunas(w);
+
+        //resolve o sistema wh = a
+        w->fatoracaoQR(a);
+        w->resolveMultiplosSistemas(a, h);
+
+//        cout << "A DEPOIS" << endl;
+//        a->print();
+//
+//        cout << "W DEPOIS" << endl;
+//        w->print();
+//
+//        cout << "H DEPOIS" << endl;
+//        h->print();
+
+        auxiliarTornaPositivo(h);
+//        cout << "H DEPOIS POSITIVADO" << endl;
+//        h->print();
+
+        a = aCopia->geraCopia();
+
+        Matrix* aTransposta = a->transpoe();
+        Matrix* hTransposta = h->transpoe();
+        NullMatrix* wTranspostaAux = new NullMatrix(p, n, CASAS_DECIMAIS);
+        Matrix* wTransposta = dynamic_cast<Matrix*>(wTranspostaAux);
+
+//        cout << "A DEPOIS TRANSPOSTA" << endl;
+//        aTransposta->print();
+
+//        cout << "H DEPOIS POSITIVADO TRANSPOSTA" << endl;
+//        hTransposta->print();
+
+        hTransposta->fatoracaoQR(aTransposta);
+        hTransposta->resolveMultiplosSistemas(aTransposta, wTransposta);
+
+//        cout << "A DEPOIS TRANSPOSTA DEPOIS" << endl;
+//        aTransposta->print();
+//
+//        cout << "W DEPOIS TRANSPOSTA DEPOIS" << endl;
+//        wTransposta->print();
+//
+//        cout << "A DEPOIS POSITIVADO TRANSPOSTA DEPOIS" << endl;
+//        hTransposta->print();
+
+        w = wTransposta->transpoe();
+
+//        cout << "W NOVA (W TRANSPOSTA)" << endl;
+//        w->print();
+
+        auxiliarTornaPositivo(w);
+
+//        cout << "W NOVA POSITIVADA" << endl;
+//        w->print();
+    }
+
+    cout << contador << endl;
+    w->print();
+    h->print();
+
+    w->multiplica(h)->print();
 }
 
 int main() {
@@ -158,6 +297,8 @@ int main() {
     //exercicioUmD();
 
     exercicioDois();
+
+
 
     return 0;
 }

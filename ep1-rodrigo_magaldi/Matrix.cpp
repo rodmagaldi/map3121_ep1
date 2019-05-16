@@ -182,6 +182,18 @@ Matrix* Matrix::multiplica(Matrix* m) {
     return resolvida;
 }
 
+double Matrix::calculaDiferenca(Matrix* m) {
+    double soma = 0;
+
+    for (int i=0; i<this->nLinhas; i++) {
+        for(int j=0; j<this->nColunas; j++) {
+            soma += pow(this->matriz[i][j] - m->matriz[i][j] , 2);
+        }
+    }
+
+    return soma;
+}
+
 Matrix* Matrix::transpoe() {
     Matrix* transposta = new Matrix(this->nColunas, this->nLinhas, this->precisao);
     for (int i=0; i<transposta->nLinhas; i++) {
@@ -193,4 +205,17 @@ Matrix* Matrix::transpoe() {
    }
 
    return transposta;
+}
+
+Matrix* Matrix::geraCopia() {
+    Matrix* copia = new Matrix(this->nLinhas, this->nColunas, this->precisao);
+    for (int i=0; i<nLinhas; i++) {
+        vector<double> temp;
+        for (int j=0; j<nColunas; j++) {
+            temp.push_back(this->matriz[i][j]);
+        }
+        copia->matriz.push_back(temp);
+   }
+
+   return copia;
 }

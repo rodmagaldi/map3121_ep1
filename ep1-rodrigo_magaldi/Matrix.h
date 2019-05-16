@@ -32,8 +32,14 @@ class Matrix
         //metodo que multiplica this->matriz por m, retornando a matriz resultado
         Matrix* multiplica(Matrix* m);
 
+        //metodo que calcula a diferenca entre duas matrizes, com base na norma de frobenius
+        double calculaDiferenca(Matrix* m);
+
         //metodo que transpoe this->matriz, retornando a matriz transposta
         Matrix* transpoe();
+
+        //metodo que gera um copia da matriz e a retorna
+        Matrix* geraCopia();
 
         //metodo para printar this->matriz
         void print();

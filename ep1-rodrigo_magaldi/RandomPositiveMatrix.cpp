@@ -12,7 +12,7 @@ RandomPositiveMatrix::RandomPositiveMatrix(int nl, int nc, int p): Matrix (nl, n
     for (int i=0; i<nLinhas; i++) {
         vector<double> temp;
         for (int j=0; j<nColunas; j++) {
-            temp.push_back((rand() % 100) + 1);
+            temp.push_back((rand() % 10) + 1);
         }
         this->matriz.push_back(temp);
    }

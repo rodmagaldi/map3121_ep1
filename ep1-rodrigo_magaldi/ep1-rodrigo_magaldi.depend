@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1557935196 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\main.cpp
+1557973511 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\main.cpp
 	<iostream>
 	<vector>
 	<math.h>
@@ -16,15 +16,18 @@
 	"MatrixwEx1d.h"
 	"MatrixaEx1d.h"
 	"MatrixhEx1d.h"
+	"RandomPositiveMatrix.h"
+	"UserGeneratedMatrix.h"
+	"NullMatrix.h"
 
-1557933466 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrix.cpp
+1557973803 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrix.cpp
 	"Matrix.h"
 	<iostream>
 	<string>
 	<math.h>
 	<bits/stdc++.h>
 
-1557933109 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrix.h
+1557971471 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrix.h
 	<vector>
 
 1557512121 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixex1a.h
@@ -123,7 +126,7 @@
 1557792728 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\matrixhex1d.h
 	"Matrix.h"
 
-1557935228 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\randompositivematrix.cpp
+1557939694 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\randompositivematrix.cpp
 	"RandomPositiveMatrix.h"
 	<iostream>
 	"math.h"
@@ -131,5 +134,21 @@
 	<cstdlib>
 
 1557935196 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\randompositivematrix.h
+	"Matrix.h"
+
+1557937839 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\usergeneratedmatrix.cpp
+	"UserGeneratedMatrix.h"
+	<iostream>
+	"math.h"
+
+1557937421 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\usergeneratedmatrix.h
+	"Matrix.h"
+
+1557940497 source:c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\nullmatrix.cpp
+	"NullMatrix.h"
+	<iostream>
+	"math.h"
+
+1557940543 c:\users\rodrigo magaldi\desktop\coisas da poli\map3121\ep1\ep1-rodrigo_magaldi\nullmatrix.h
 	"Matrix.h"
 
