@@ -27,6 +27,8 @@
 #define EPSILON 0.00001
 #define ITMAX 100
 
+#include <fstream>
+
 using namespace std;
 
 void exercicioUmA() {
@@ -218,11 +220,8 @@ void exercicioDois() {
     h->print();
 
     //inicializa o contador de iteracoes
-    int contador = 0;
 
-    while(contador<ITMAX && aCopia->calculaDiferenca(w->multiplica(h)) > EPSILON ) {
-
-        contador++;
+    for(int contador = 0; contador<ITMAX && aCopia->calculaDiferenca(w->multiplica(h)) > EPSILON; contador++) {
 
         a = aCopia->geraCopia();
 
@@ -247,9 +246,10 @@ void exercicioDois() {
 //        h->print();
 
         a = aCopia->geraCopia();
-
         Matrix* aTransposta = a->transpoe();
+
         Matrix* hTransposta = h->transpoe();
+
         NullMatrix* wTranspostaAux = new NullMatrix(p, n, CASAS_DECIMAIS);
         Matrix* wTransposta = dynamic_cast<Matrix*>(wTranspostaAux);
 
@@ -282,11 +282,21 @@ void exercicioDois() {
 //        w->print();
     }
 
-    cout << contador << endl;
     w->print();
     h->print();
 
     w->multiplica(h)->print();
+}
+
+void exercicioTres() {
+    ifstream file("dados_mnist/train_dig0.txt");
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+            printf("%s", line.c_str());
+        }
+        file.close();
+    }
 }
 
 int main() {
@@ -296,9 +306,25 @@ int main() {
     //exercicioUmC();
     //exercicioUmD();
 
-    exercicioDois();
+    //exercicioDois();
 
+    //exercicioTres();
 
+    UserGeneratedMatrix* wAux = new UserGeneratedMatrix(3, 3, 3);
+    Matrix* w = dynamic_cast<Matrix*>(wAux);
+
+    UserGeneratedMatrix* bAux = new UserGeneratedMatrix(3, 1, 3);
+    Matrix* b = dynamic_cast<Matrix*>(bAux);
+
+    NullMatrix* xAux = new NullMatrix(3, 1, 3);
+    Matrix* x = dynamic_cast<Matrix*>(xAux);
+
+    w->fatoracaoQR(b);
+    w->resolveSistema(b, x);
+
+    w->print();
+    b->print();
+    x->print();
 
     return 0;
 }

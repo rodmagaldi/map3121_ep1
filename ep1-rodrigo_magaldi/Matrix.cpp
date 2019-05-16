@@ -145,7 +145,7 @@ void Matrix::rotGivens(int i, int j, double c, double s) {
 void Matrix::resolveSistema(Matrix* b, Matrix* x) {
     for (int k=this->nColunas-1; k>=0; k--) {
         x->matriz[k][0] = b->matriz[k][0];
-        for (int j=k; j<this->getNColunas(); j++) {
+        for (int j=k+1; j<this->getNColunas(); j++) {
             x->matriz[k][0] -= this->matriz[k][j] * x->matriz[j][0];
         }
         x->matriz[k][0] /= this->matriz[k][k];
@@ -216,6 +216,5 @@ Matrix* Matrix::geraCopia() {
         }
         copia->matriz.push_back(temp);
    }
-
    return copia;
 }
