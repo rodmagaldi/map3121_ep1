@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <vector>
 #include <math.h>
 #include "Matrix.h"
@@ -28,6 +29,10 @@
 #define ITMAX 100
 
 #include <fstream>
+#include <sstream>
+#define NDIG_TREINO 100
+#define COMPONENTES_DESEJADOS 5
+#define N_TEST 10000
 
 using namespace std;
 
@@ -199,51 +204,46 @@ void exercicioDois() {
     //gera matriz a
     UserGeneratedMatrix* aAux = new UserGeneratedMatrix(n, m, CASAS_DECIMAIS);
     Matrix* a = dynamic_cast<Matrix*>(aAux);
-    cout << "A" << endl;
+    cout << "Matriz A:" << endl;
     a->print();
 
     //copia matriz a
     Matrix* aCopia = a->geraCopia();
-    cout << "A COPIA" << endl;
     aCopia->print();
 
     //gera matriz aleatoria positiva w
     RandomPositiveMatrix* wAux = new RandomPositiveMatrix(n, p, CASAS_DECIMAIS);
     Matrix* w = dynamic_cast<Matrix*>(wAux);
-    cout << "W" << endl;
+    cout << "Matriz W:" << endl;
     w->print();
 
     //gera matriz nula h que sera resolvida
     NullMatrix* hAux = new NullMatrix(p, m, CASAS_DECIMAIS);
     Matrix* h = dynamic_cast<Matrix*>(hAux);
-    cout << "H" << endl;
+    cout << "Matriz H:" << endl;
     h->print();
 
-    //inicializa o contador de iteracoes
+    RandomPositiveMatrix* multAux = new RandomPositiveMatrix(n, m, CASAS_DECIMAIS);
+    Matrix* mult = dynamic_cast<Matrix*>(multAux);
 
-    for(int contador = 0; contador<ITMAX && aCopia->calculaDiferenca(w->multiplica(h)) > EPSILON; contador++) {
+    for(int contador = 0; contador < ITMAX && aCopia->calculaDiferenca(mult) > EPSILON; contador++) {
+
+        cout << contador << "a" << endl;
+
+        delete mult;
+
+        cout << contador << "b" << endl;
 
         a = aCopia->geraCopia();
 
-        //normaliza as colunas de w
         auxiliarNormalizaColunas(w);
 
-        //resolve o sistema wh = a
         w->fatoracaoQR(a);
         w->resolveMultiplosSistemas(a, h);
 
-//        cout << "A DEPOIS" << endl;
-//        a->print();
-//
-//        cout << "W DEPOIS" << endl;
-//        w->print();
-//
-//        cout << "H DEPOIS" << endl;
-//        h->print();
-
         auxiliarTornaPositivo(h);
-//        cout << "H DEPOIS POSITIVADO" << endl;
-//        h->print();
+
+        delete a;
 
         a = aCopia->geraCopia();
         Matrix* aTransposta = a->transpoe();
@@ -253,33 +253,21 @@ void exercicioDois() {
         NullMatrix* wTranspostaAux = new NullMatrix(p, n, CASAS_DECIMAIS);
         Matrix* wTransposta = dynamic_cast<Matrix*>(wTranspostaAux);
 
-//        cout << "A DEPOIS TRANSPOSTA" << endl;
-//        aTransposta->print();
-
-//        cout << "H DEPOIS POSITIVADO TRANSPOSTA" << endl;
-//        hTransposta->print();
-
         hTransposta->fatoracaoQR(aTransposta);
         hTransposta->resolveMultiplosSistemas(aTransposta, wTransposta);
 
-//        cout << "A DEPOIS TRANSPOSTA DEPOIS" << endl;
-//        aTransposta->print();
-//
-//        cout << "W DEPOIS TRANSPOSTA DEPOIS" << endl;
-//        wTransposta->print();
-//
-//        cout << "A DEPOIS POSITIVADO TRANSPOSTA DEPOIS" << endl;
-//        hTransposta->print();
-
         w = wTransposta->transpoe();
-
-//        cout << "W NOVA (W TRANSPOSTA)" << endl;
-//        w->print();
 
         auxiliarTornaPositivo(w);
 
-//        cout << "W NOVA POSITIVADA" << endl;
-//        w->print();
+        delete a;
+
+        delete aTransposta;
+        delete hTransposta;
+        delete wTranspostaAux;
+        delete wTransposta;
+
+        mult = w->multiplica(h);
     }
 
     w->print();
@@ -288,17 +276,199 @@ void exercicioDois() {
     w->multiplica(h)->print();
 }
 
-void exercicioTres() {
-    ifstream file("dados_mnist/train_dig0.txt");
-    if (file.is_open()) {
-        string line;
-        while (getline(file, line)) {
-            printf("%s", line.c_str());
+Matrix* auxiliarLeArquivoTreino(int digito, int quant) {
+    ifstream file;
+    string dir = "dados_mnist/train_dig" + to_string(digito) + ".txt";
+    file.open(dir);
+
+    cout << "Lendo arquivo " << digito << "..." << endl;
+
+    NullMatrix* matrizArquivoNula = new NullMatrix(784, quant, CASAS_DECIMAIS);
+    Matrix* matrizArquivo = dynamic_cast<Matrix*>(matrizArquivoNula);
+
+    int temp;
+    string linha;
+
+    for (int i = 0; i < 784; i++) {
+        getline(file, linha);
+        stringstream in(linha);
+        for (int j = 0; j < quant; j++) {
+            in >> temp;
+            matrizArquivo->matriz[i][j] = (double)temp / 255;
         }
-        file.close();
     }
+
+    cout << "Arquivo " << digito << " lido!" << endl;
+
+    file.close();
+    return matrizArquivo;
 }
 
+Matrix* auxiliarLeArquivo(string path, int quant) {
+    ifstream file;
+    string dir = path;
+    file.open(dir);
+
+    cout << "Lendo arquivo..." << endl;
+
+    NullMatrix* matrizArquivoNula = new NullMatrix(784, quant, CASAS_DECIMAIS);
+    Matrix* matrizArquivo = dynamic_cast<Matrix*>(matrizArquivoNula);
+
+    int temp;
+    string linha;
+
+    for (int i = 0; i < 784; i++) {
+        getline(file, linha);
+        stringstream in(linha);
+        for (int j = 0; j < quant; j++) {
+            in >> temp;
+            matrizArquivo->matriz[i][j] = (double)temp / 255;
+        }
+    }
+
+    cout << "Arquivo lido!" << endl;
+
+    file.close();
+    return matrizArquivo;
+}
+
+Matrix* auxiliarTreino(int digito) {
+
+    Matrix* treinoA = auxiliarLeArquivoTreino(digito, NDIG_TREINO);
+    Matrix* treinoACopia = treinoA->geraCopia();
+
+    RandomPositiveMatrix* wAux = new RandomPositiveMatrix(784, COMPONENTES_DESEJADOS, CASAS_DECIMAIS);
+    Matrix* w = dynamic_cast<Matrix*>(wAux);
+
+    NullMatrix* hAux = new NullMatrix(COMPONENTES_DESEJADOS, NDIG_TREINO, CASAS_DECIMAIS);
+    Matrix* h = dynamic_cast<Matrix*>(hAux);
+
+    int n = treinoA->getNLinhas();
+    int m = NDIG_TREINO;
+    int p = COMPONENTES_DESEJADOS;
+
+    //RandomPositiveMatrix* multAux = new RandomPositiveMatrix(n, m, CASAS_DECIMAIS);
+    //Matrix* mult = dynamic_cast<Matrix*>(multAux);
+
+    cout << "Treinando digito " << digito << "..." << endl << endl;
+
+    for(int contador = 0; contador<ITMAX && treinoACopia->calculaDiferenca(w->multiplica(h)) > EPSILON; contador++) {
+
+        //delete mult;
+
+        treinoA = treinoACopia->geraCopia();
+
+        auxiliarNormalizaColunas(w);
+
+        w->fatoracaoQR(treinoA);
+        w->resolveMultiplosSistemas(treinoA, h);
+
+        auxiliarTornaPositivo(h);
+
+        delete treinoA;
+
+        treinoA = treinoACopia->geraCopia();
+        Matrix* aTransposta = treinoA->transpoe();
+
+        Matrix* hTransposta = h->transpoe();
+
+        NullMatrix* wTranspostaAux = new NullMatrix(p, n, CASAS_DECIMAIS);
+        Matrix* wTransposta = dynamic_cast<Matrix*>(wTranspostaAux);
+
+        hTransposta->fatoracaoQR(aTransposta);
+        hTransposta->resolveMultiplosSistemas(aTransposta, wTransposta);
+
+        w = wTransposta->transpoe();
+
+        auxiliarTornaPositivo(w);
+
+        delete treinoA;
+
+        delete aTransposta;
+        delete hTransposta;
+        delete wTranspostaAux;
+        delete wTransposta;
+
+        //mult = w->multiplica(h);
+    }
+
+    delete h;
+    return w;
+}
+
+void exercicioTres() {
+    Matrix* w0 = auxiliarTreino(0);
+    Matrix* w1 = auxiliarTreino(1);
+    Matrix* w2 = auxiliarTreino(2);
+    Matrix* w3 = auxiliarTreino(3);
+    Matrix* w4 = auxiliarTreino(4);
+    Matrix* w5 = auxiliarTreino(5);
+    Matrix* w6 = auxiliarTreino(6);
+    Matrix* w7 = auxiliarTreino(7);
+    Matrix* w8 = auxiliarTreino(8);
+    Matrix* w9 = auxiliarTreino(9);
+
+    NullMatrix* h0 = new NullMatrix(COMPONENTES_DESEJADOS, N_TEST, CASAS_DECIMAIS);
+    NullMatrix* h1 = new NullMatrix(COMPONENTES_DESEJADOS, N_TEST, CASAS_DECIMAIS);
+    NullMatrix* h2 = new NullMatrix(COMPONENTES_DESEJADOS, N_TEST, CASAS_DECIMAIS);
+    NullMatrix* h3 = new NullMatrix(COMPONENTES_DESEJADOS, N_TEST, CASAS_DECIMAIS);
+    NullMatrix* h4 = new NullMatrix(COMPONENTES_DESEJADOS, N_TEST, CASAS_DECIMAIS);
+    NullMatrix* h5 = new NullMatrix(COMPONENTES_DESEJADOS, N_TEST, CASAS_DECIMAIS);
+    NullMatrix* h6 = new NullMatrix(COMPONENTES_DESEJADOS, N_TEST, CASAS_DECIMAIS);
+    NullMatrix* h7 = new NullMatrix(COMPONENTES_DESEJADOS, N_TEST, CASAS_DECIMAIS);
+    NullMatrix* h8 = new NullMatrix(COMPONENTES_DESEJADOS, N_TEST, CASAS_DECIMAIS);
+    NullMatrix* h9 = new NullMatrix(COMPONENTES_DESEJADOS, N_TEST, CASAS_DECIMAIS);
+
+    Matrix* a0 = auxiliarLeArquivo("dados_mnist/test_images.txt", N_TEST);
+    Matrix* a1 = a0->geraCopia();
+    Matrix* a2 = a0->geraCopia();
+    Matrix* a3 = a0->geraCopia();
+    Matrix* a4 = a0->geraCopia();
+    Matrix* a5 = a0->geraCopia();
+    Matrix* a6 = a0->geraCopia();
+    Matrix* a7 = a0->geraCopia();
+    Matrix* a8 = a0->geraCopia();
+    Matrix* a9 = a0->geraCopia();
+
+    w0->fatoracaoQR(a0);
+    w0->resolveMultiplosSistemas(a0, h0);
+
+    w1->fatoracaoQR(a1);
+    w1->resolveMultiplosSistemas(a1, h1);
+    delete a1;
+
+    w2->fatoracaoQR(a2);
+    w2->resolveMultiplosSistemas(a2, h2);
+    delete a2;
+
+    w3->fatoracaoQR(a3);
+    w3->resolveMultiplosSistemas(a3, h3);
+    delete a3;
+
+    w4->fatoracaoQR(a4);
+    w4->resolveMultiplosSistemas(a4, h4);
+    delete a4;
+
+    w5->fatoracaoQR(a5);
+    w5->resolveMultiplosSistemas(a5, h5);
+    delete a5;
+
+    w6->fatoracaoQR(a6);
+    w6->resolveMultiplosSistemas(a6, h6);
+    delete a6;
+
+    w7->fatoracaoQR(a7);
+    w7->resolveMultiplosSistemas(a7, h7);
+    delete a7;
+
+    w8->fatoracaoQR(a8);
+    w8->resolveMultiplosSistemas(a8, h8);
+    delete a8;
+
+    w9->fatoracaoQR(a9);
+    w9->resolveMultiplosSistemas(a9, h9);
+    delete a9;
+}
 int main() {
 
     //exercicioUmA();
@@ -306,9 +476,9 @@ int main() {
     //exercicioUmC();
     //exercicioUmD();
 
-    exercicioDois();
+    //exercicioDois();
 
-    //exercicioTres();
+    exercicioTres();
 
     return 0;
 }

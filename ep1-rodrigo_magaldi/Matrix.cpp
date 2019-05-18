@@ -48,7 +48,6 @@ Matrix::Matrix(int linhas, int colunas, int precisao){
 
 //destrutor
 Matrix::~Matrix() {
-    cout << "===== Matriz destruida ======" << endl;
 }
 
 //getter de nLinhas
