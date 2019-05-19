@@ -35,6 +35,9 @@ class Matrix
         //metodo que calcula a diferenca entre duas matrizes, com base na norma de frobenius
         double calculaDiferenca(Matrix* m);
 
+        //metodo que subtrai a matriz m de this->matriz
+        Matrix* subtrai(Matrix* m);
+
         //metodo que transpoe this->matriz, retornando a matriz transposta
         Matrix* transpoe();
 

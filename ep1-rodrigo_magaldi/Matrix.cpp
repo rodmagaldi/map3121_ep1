@@ -193,6 +193,21 @@ double Matrix::calculaDiferenca(Matrix* m) {
     return soma;
 }
 
+Matrix* Matrix::subtrai(Matrix* m) {
+
+    Matrix* resposta = new Matrix(this->nLinhas, this->nColunas, this->precisao);
+
+    for (int i=0; i<this->nLinhas; i++) {
+        vector<double> temp;
+        for (int j=0; j<this->nColunas; j++) {
+            temp.push_back(this->matriz[i][j] - m->matriz[i][j]);
+        }
+        resposta->matriz.push_back(temp);
+   }
+
+   return resposta;
+}
+
 Matrix* Matrix::transpoe() {
     Matrix* transposta = new Matrix(this->nColunas, this->nLinhas, this->precisao);
     for (int i=0; i<transposta->nLinhas; i++) {
