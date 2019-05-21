@@ -24,14 +24,14 @@
 #include "UserGeneratedMatrix.h"
 #include "NullMatrix.h"
 
-#define CASAS_DECIMAIS 3
+#define CASAS_DECIMAIS 6
 #define EPSILON 0.00001
 #define ITMAX 100
 
 #include <fstream>
 #include <sstream>
-#define NDIG_TREINO 100
-#define COMPONENTES_DESEJADOS 5
+#define NDIG_TREINO 4000
+#define COMPONENTES_DESEJADOS 15
 #define N_TEST 10000
 
 using namespace std;
@@ -226,13 +226,9 @@ void exercicioDois() {
     RandomPositiveMatrix* multAux = new RandomPositiveMatrix(n, m, CASAS_DECIMAIS);
     Matrix* mult = dynamic_cast<Matrix*>(multAux);
 
-    for(int contador = 0; contador < ITMAX && aCopia->calculaDiferenca(mult) > EPSILON; contador++) {
+    Matrix* multAnterior = w->multiplica(h);
 
-        cout << contador << "a" << endl;
-
-        delete mult;
-
-        cout << contador << "b" << endl;
+    for(int contador = 0; contador < ITMAX && fabs(aCopia->calculaDiferenca(mult) - aCopia->calculaDiferenca(multAnterior)) > EPSILON; contador++) {
 
         a = aCopia->geraCopia();
 
@@ -264,16 +260,28 @@ void exercicioDois() {
 
         delete aTransposta;
         delete hTransposta;
-        delete wTranspostaAux;
         delete wTransposta;
 
+        delete multAnterior;
+
+        multAnterior = mult->geraCopia();
+
+        delete mult;
+
         mult = w->multiplica(h);
+
+        cout << contador << " ";
+
     }
 
     w->print();
     h->print();
 
-    w->multiplica(h)->print();
+    mult->print();
+
+    double erro = fabs(aCopia->calculaDiferenca(mult) - aCopia->calculaDiferenca(multAnterior));
+
+    cout << "Erro: " << erro << endl;
 }
 
 Matrix* auxiliarLeArquivoTreino(int digito, int quant) {
@@ -286,7 +294,7 @@ Matrix* auxiliarLeArquivoTreino(int digito, int quant) {
     NullMatrix* matrizArquivoNula = new NullMatrix(784, quant, CASAS_DECIMAIS);
     Matrix* matrizArquivo = dynamic_cast<Matrix*>(matrizArquivoNula);
 
-    int temp;
+    double temp;
     string linha;
 
     for (int i = 0; i < 784; i++) {
@@ -304,12 +312,12 @@ Matrix* auxiliarLeArquivoTreino(int digito, int quant) {
     return matrizArquivo;
 }
 
-Matrix* auxiliarLeArquivo(string path, int quant) {
+Matrix* auxiliarLeArquivoTeste(string path, int quant) {
     ifstream file;
     string dir = path;
     file.open(dir);
 
-    cout << "Lendo arquivo..." << endl;
+    cout << "Lendo arquivo de testes..." << endl;
 
     NullMatrix* matrizArquivoNula = new NullMatrix(784, quant, CASAS_DECIMAIS);
     Matrix* matrizArquivo = dynamic_cast<Matrix*>(matrizArquivoNula);
@@ -326,10 +334,35 @@ Matrix* auxiliarLeArquivo(string path, int quant) {
         }
     }
 
-    cout << "Arquivo lido!" << endl;
+    cout << "Arquivo lido!" << endl << endl;
 
     file.close();
     return matrizArquivo;
+}
+
+vector<int> auxiliarLeArquivoRespostas(string path) {
+    ifstream file;
+    string dir = path;
+    file.open(dir);
+
+    cout << "Lendo arquivo de respostas..." << endl;
+
+    vector<int> respostas;
+
+    int temp;
+    string linha;
+
+    for (int i = 0; i < N_TEST; i++) {
+        getline(file, linha);
+        stringstream in(linha);
+        in >> temp;
+        respostas.push_back(temp);
+    }
+
+    cout << "Arquivo lido!" << endl << endl;
+
+    file.close();
+    return respostas;
 }
 
 Matrix* auxiliarTreino(int digito) {
@@ -350,11 +383,14 @@ Matrix* auxiliarTreino(int digito) {
     RandomPositiveMatrix* multAux = new RandomPositiveMatrix(n, m, CASAS_DECIMAIS);
     Matrix* mult = dynamic_cast<Matrix*>(multAux);
 
+    Matrix* multAnterior = w->multiplica(h);
+
     cout << "Treinando digito " << digito << "..." << endl;
 
     cout << "Iteracao ";
 
-    for(int contador = 0; contador<ITMAX && treinoACopia->calculaDiferenca(mult) > EPSILON; contador++) {
+    for(int contador = 0; contador<ITMAX &&
+                        fabs(treinoACopia->calculaDiferenca(mult) - treinoACopia->calculaDiferenca(multAnterior))/treinoACopia->calculaDiferenca(mult) > EPSILON; contador++) {
 
         cout << contador << " ";
 
@@ -388,31 +424,37 @@ Matrix* auxiliarTreino(int digito) {
 
         delete aTransposta;
         delete hTransposta;
-        delete wTranspostaAux;
+        delete wTransposta;
+
+        delete multAnterior;
+
+        multAnterior = mult->geraCopia();
 
         delete mult;
 
         mult = w->multiplica(h);
     }
 
+    double erro = fabs(treinoACopia->calculaDiferenca(mult) - treinoACopia->calculaDiferenca(multAnterior))/treinoACopia->calculaDiferenca(mult);
+
     delete treinoACopia;
     delete hAux;
-    //delete multAux;
 
-    cout << "Digito " << digito << " treinado!" << endl << endl;
+    cout << endl << "Digito " << digito << " treinado! Erro: " << erro << endl << endl;
 
     return w;
 }
 
 vector<double> auxiliarCalculaErro(Matrix* m) {
     vector<double> erros;
+    double soma;
     for (int j=0; j<m->getNColunas(); j++) {
-        double soma = 0;
+        soma = 0;
         for (int i=0; i<m->getNLinhas(); i++) {
             soma += pow(m->matriz[i][j], 2);
         }
-        soma = sqrt(soma);
-        erros.push_back(soma);
+        double erro = sqrt(soma);
+        erros.push_back(erro);
     }
     return erros;
 }
@@ -421,15 +463,34 @@ void exercicioTres() {
 
     //define as matrix Wd para cada digito
     Matrix* w0 = auxiliarTreino(0);
+    Matrix* w0Original = w0->geraCopia();
+
     Matrix* w1 = auxiliarTreino(1);
+    Matrix* w1Original = w1->geraCopia();
+
     Matrix* w2 = auxiliarTreino(2);
+    Matrix* w2Original = w2->geraCopia();
+
     Matrix* w3 = auxiliarTreino(3);
+    Matrix* w3Original = w3->geraCopia();
+
     Matrix* w4 = auxiliarTreino(4);
+    Matrix* w4Original = w4->geraCopia();
+
     Matrix* w5 = auxiliarTreino(5);
+    Matrix* w5Original = w5->geraCopia();
+
     Matrix* w6 = auxiliarTreino(6);
+    Matrix* w6Original = w6->geraCopia();
+
     Matrix* w7 = auxiliarTreino(7);
+    Matrix* w7Original = w7->geraCopia();
+
     Matrix* w8 = auxiliarTreino(8);
+    Matrix* w8Original = w8->geraCopia();
+
     Matrix* w9 = auxiliarTreino(9);
+    Matrix* w9Original = w9->geraCopia();
 
 
     //inicializa as matrizes Hd correspondentes a cada Wd
@@ -446,21 +507,20 @@ void exercicioTres() {
 
 
     //inicializa as matrizes Ad para cada Wd
-    Matrix* a0 = auxiliarLeArquivo("dados_mnist/test_images.txt", N_TEST);
-    Matrix* a1 = a0->geraCopia();
-    Matrix* a2 = a0->geraCopia();
-    Matrix* a3 = a0->geraCopia();
-    Matrix* a4 = a0->geraCopia();
-    Matrix* a5 = a0->geraCopia();
-    Matrix* a6 = a0->geraCopia();
-    Matrix* a7 = a0->geraCopia();
-    Matrix* a8 = a0->geraCopia();
-    Matrix* a9 = a0->geraCopia();
+    Matrix* aOriginal = auxiliarLeArquivoTeste("dados_mnist/test_images.txt", N_TEST);
+    Matrix* a0 = aOriginal->geraCopia();
+    Matrix* a1 = aOriginal->geraCopia();
+    Matrix* a2 = aOriginal->geraCopia();
+    Matrix* a3 = aOriginal->geraCopia();
+    Matrix* a4 = aOriginal->geraCopia();
+    Matrix* a5 = aOriginal->geraCopia();
+    Matrix* a6 = aOriginal->geraCopia();
+    Matrix* a7 = aOriginal->geraCopia();
+    Matrix* a8 = aOriginal->geraCopia();
+    Matrix* a9 = aOriginal->geraCopia();
 
 
-    //mantem uma matriz original para realizar uma subtracao no final
-    Matrix* aOriginal = a0->geraCopia();
-
+    cout << "Iniciando classificacao..." << endl << endl;
 
     //resolve as fatoracoes Wd*Hd = Ad
     w0->fatoracaoQR(a0);
@@ -503,44 +563,44 @@ void exercicioTres() {
     w9->resolveMultiplosSistemas(a9, h9);
     delete a9;
 
-    //cria as matrizes diferenca Ad - Wd*Hd
-    Matrix* mult0 = w0->multiplica(h0);
+    //cria as matrizes diferenca A - Wd*Hd
+    Matrix* mult0 = w0Original->multiplica(h0);
     Matrix* diff0 = aOriginal->subtrai(mult0);
     delete mult0;
 
-    Matrix* mult1 = w1->multiplica(h1);
+    Matrix* mult1 = w1Original->multiplica(h1);
     Matrix* diff1 = aOriginal->subtrai(mult1);
     delete mult1;
 
-    Matrix* mult2 = w2->multiplica(h2);
+    Matrix* mult2 = w2Original->multiplica(h2);
     Matrix* diff2 = aOriginal->subtrai(mult2);
     delete mult2;
 
-    Matrix* mult3 = w3->multiplica(h3);
+    Matrix* mult3 = w3Original->multiplica(h3);
     Matrix* diff3 = aOriginal->subtrai(mult3);
     delete mult3;
 
-    Matrix* mult4 = w4->multiplica(h4);
+    Matrix* mult4 = w4Original->multiplica(h4);
     Matrix* diff4 = aOriginal->subtrai(mult4);
     delete mult4;
 
-    Matrix* mult5 = w5->multiplica(h5);
+    Matrix* mult5 = w5Original->multiplica(h5);
     Matrix* diff5 = aOriginal->subtrai(mult5);
     delete mult5;
 
-    Matrix* mult6 = w6->multiplica(h6);
+    Matrix* mult6 = w6Original->multiplica(h6);
     Matrix* diff6 = aOriginal->subtrai(mult6);
     delete mult6;
 
-    Matrix* mult7 = w7->multiplica(h7);
+    Matrix* mult7 = w7Original->multiplica(h7);
     Matrix* diff7 = aOriginal->subtrai(mult7);
     delete mult7;
 
-    Matrix* mult8 = w8->multiplica(h8);
+    Matrix* mult8 = w8Original->multiplica(h8);
     Matrix* diff8 = aOriginal->subtrai(mult8);
     delete mult8;
 
-    Matrix* mult9 = w9->multiplica(h9);
+    Matrix* mult9 = w9Original->multiplica(h9);
     Matrix* diff9 = aOriginal->subtrai(mult9);
     delete mult9;
 
@@ -557,31 +617,31 @@ void exercicioTres() {
     vector<double> erro8 = auxiliarCalculaErro(diff8);
     vector<double> erro9 = auxiliarCalculaErro(diff9);
 
-    vector< vector<double> > matrizErro;
-    matrizErro.push_back(erro0);
-    matrizErro.push_back(erro1);
-    matrizErro.push_back(erro2);
-    matrizErro.push_back(erro3);
-    matrizErro.push_back(erro4);
-    matrizErro.push_back(erro5);
-    matrizErro.push_back(erro6);
-    matrizErro.push_back(erro7);
-    matrizErro.push_back(erro8);
-    matrizErro.push_back(erro9);
+    vector< vector<double> > matrizErros;
+    matrizErros.push_back(erro0);
+    matrizErros.push_back(erro1);
+    matrizErros.push_back(erro2);
+    matrizErros.push_back(erro3);
+    matrizErros.push_back(erro4);
+    matrizErros.push_back(erro5);
+    matrizErros.push_back(erro6);
+    matrizErros.push_back(erro7);
+    matrizErros.push_back(erro8);
+    matrizErros.push_back(erro9);
 
 
     //vetor de respostas do teste
     vector<int> respostas;
 
     //preenche o vetor respostas
-    for (int j=0; j<matrizErro[0].size(); j++) {
+    for (unsigned j=0; j<matrizErros[0].size(); j++) {
 
         int nTemp = 0;
-        double temp = matrizErro[0][j];
+        double temp = matrizErros[0][j];
 
-        for (int i=1; i<matrizErro.size(); i++) {
-            if (matrizErro[i][j] < temp) {
-                temp = matrizErro[i][j];
+        for (unsigned i=0; i<matrizErros.size(); i++) {
+            if (matrizErros[i][j] < temp) {
+                temp = matrizErros[i][j];
                 nTemp = i;
             }
         }
@@ -590,10 +650,123 @@ void exercicioTres() {
     }
 
 
-    //le o arquivo de valores reais e armazena num outro vetor
-    vector<int> valoresReais;
 
-}
+    //le o arquivo de valores reais e armazena num outro vetor
+    vector<int> valoresReais = auxiliarLeArquivoRespostas("dados_mnist/respostas.txt");
+
+    int certos = 0;
+
+    int n0 = 0;
+    int n1 = 0;
+    int n2 = 0;
+    int n3 = 0;
+    int n4 = 0;
+    int n5 = 0;
+    int n6 = 0;
+    int n7 = 0;
+    int n8 = 0;
+    int n9 = 0;
+
+    int certos0 = 0;
+    int certos1 = 0;
+    int certos2 = 0;
+    int certos3 = 0;
+    int certos4 = 0;
+    int certos5 = 0;
+    int certos6 = 0;
+    int certos7 = 0;
+    int certos8 = 0;
+    int certos9 = 0;
+
+
+    for (unsigned i=1; i<valoresReais.size(); i++) {
+        if (valoresReais[i] == 0) {
+            n0++;
+            if (respostas[i] == 0) {
+                certos0++;
+                certos++;
+            }
+        }
+        if (valoresReais[i] == 1) {
+            n1++;
+            if (respostas[i] == 1) {
+                certos1++;
+                certos++;
+            }
+        }
+        if (valoresReais[i] == 2) {
+            n2++;
+            if (respostas[i] == 2) {
+                certos2++;
+                certos++;
+            }
+        }
+        if (valoresReais[i] == 3) {
+            n3++;
+            if (respostas[i] == 3) {
+                certos3++;
+                certos++;
+            }
+        }
+        if (valoresReais[i] == 4) {
+            n4++;
+            if (respostas[i] == 4) {
+                certos4++;
+                certos++;
+            }
+        }
+        if (valoresReais[i] == 5) {
+            n5++;
+            if (respostas[i] == 5) {
+                certos5++;
+                certos++;
+            }
+        }
+        if (valoresReais[i] == 6) {
+            n6++;
+            if (respostas[i] == 6) {
+                certos6++;
+                certos++;
+            }
+        }
+        if (valoresReais[i] == 7) {
+            n7++;
+            if (respostas[i] == 7) {
+                certos7++;
+                certos++;
+            }
+        }
+        if (valoresReais[i] == 8) {
+            n8++;
+            if (respostas[i] == 8) {
+                certos8++;
+                certos++;
+            }
+        }
+        if (valoresReais[i] == 9) {
+            n9++;
+            if (respostas[i] == 9) {
+                certos9++;
+                certos++;
+            }
+        }
+    }
+
+    cout << "Acertos: " << certos << endl << "Total: " << valoresReais.size() << endl << "Porcentagem de acertos: " << (double)100*certos/valoresReais.size() << "%" << endl << endl;
+
+    cout << "Acertos 0: " << certos0 << endl << "Total: " << n0 << endl << "Porcentagem de acertos: " << (double)100*certos0/n0 << "%" << endl << endl;
+    cout << "Acertos 1: " << certos1 << endl << "Total: " << n1 << endl << "Porcentagem de acertos: " << (double)100*certos1/n1 << "%" << endl << endl;
+    cout << "Acertos 2: " << certos2 << endl << "Total: " << n2 << endl << "Porcentagem de acertos: " << (double)100*certos2/n2 << "%" << endl << endl;
+    cout << "Acertos 3: " << certos3 << endl << "Total: " << n3 << endl << "Porcentagem de acertos: " << (double)100*certos3/n3 << "%" << endl << endl;
+    cout << "Acertos 4: " << certos4 << endl << "Total: " << n4 << endl << "Porcentagem de acertos: " << (double)100*certos4/n4 << "%" << endl << endl;
+    cout << "Acertos 5: " << certos5 << endl << "Total: " << n5 << endl << "Porcentagem de acertos: " << (double)100*certos5/n5 << "%" << endl << endl;
+    cout << "Acertos 6: " << certos6 << endl << "Total: " << n6 << endl << "Porcentagem de acertos: " << (double)100*certos6/n6 << "%" << endl << endl;
+    cout << "Acertos 7: " << certos7 << endl << "Total: " << n7 << endl << "Porcentagem de acertos: " << (double)100*certos7/n7 << "%" << endl << endl;
+    cout << "Acertos 8: " << certos8 << endl << "Total: " << n8 << endl << "Porcentagem de acertos: " << (double)100*certos8/n8 << "%" << endl << endl;
+    cout << "Acertos 9: " << certos9 << endl << "Total: " << n9 << endl << "Porcentagem de acertos: " << (double)100*certos9/n9 << "%" << endl << endl;
+
+    }
+
 int main() {
 
     //exercicioUmA();
@@ -604,6 +777,25 @@ int main() {
     //exercicioDois();
 
     exercicioTres();
+
+//    UserGeneratedMatrix* aAux = new UserGeneratedMatrix(3, 3, CASAS_DECIMAIS);
+//    Matrix* a = dynamic_cast<Matrix*>(aAux);
+//
+//    UserGeneratedMatrix* bAux = new UserGeneratedMatrix(3, 3, CASAS_DECIMAIS);
+//    Matrix* b = dynamic_cast<Matrix*>(bAux);
+//
+//    Matrix* c = a->multiplica(b);
+//
+//    Matrix* d = a->subtrai(c);
+//
+//    c->print();
+//    d->print();
+//
+//    vector<double> erros = auxiliarCalculaErro(d);
+//
+//    for (int i=0; i<erros.size(); i++) {
+//        cout << erros[i] << endl;
+//    }
 
     return 0;
 }

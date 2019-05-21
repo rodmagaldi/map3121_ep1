@@ -59,6 +59,12 @@
 		<Unit filename="MatrixxEx1a.h" />
 		<Unit filename="MatrixxEx1b.cpp" />
 		<Unit filename="MatrixxEx1b.h" />
+		<Unit filename="NullMatrix.cpp" />
+		<Unit filename="NullMatrix.h" />
+		<Unit filename="RandomPositiveMatrix.cpp" />
+		<Unit filename="RandomPositiveMatrix.h" />
+		<Unit filename="UserGeneratedMatrix.cpp" />
+		<Unit filename="UserGeneratedMatrix.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
