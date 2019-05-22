@@ -1,0 +1,58 @@
+O exercicio programa foi desenvolvido no IDE CodeBlocks, e por conta disso o projeto no formato especifico para o CodeBlocks foi enviado junto com o codigo-fonte. 
+Por alguma razao, o CodeBlocks, por vezes, nao inclui todas as classes no projeto, entao se for rodar o codigo nessa IDE ter certeza de que todos os arquivos estao no projeto.
+
+Este exercicio programa foi desenvolvido com base numa classe Matrix que centraliza algumas
+operacoes realizadas com matrizes. Essa classe e' utilizada como classe pai para as classes
+que inicializam as matrizes relativas 'a primeira tarefa, as quais tem um algoritmo especifico
+para preenchimento de seus valores. Alem disso, ha' as classes NullMatrix, que gera uma matriz
+nula, RandomPositiveMatrix, que gera uma matriz aleatoria com valores positivos entre 0 e 10, e
+UserGeneratedMatrix, que inicializa uma matriz com valores digitados pelo usuario, todas subclasses
+de Matrix.
+
+Dessa forma, este EP possui os seguintes 33 arquivos:
+
+main.cpp
+Matrix.h
+Matrix.cpp
+
+Para o exercicio 1a:
+    MatrixEx1a.h
+    MatrixEx1a.cpp
+    MatrixbEx1a.h
+    MatrixbEx1a.cpp
+    MatrixxEx1a.h
+    MatrixxEx1a.cpp
+
+Para o exercicio 1b:
+    MatrixEx1b.h
+    MatrixEx1b.cpp
+    MatrixbEx1b.h
+    MatrixbEx1b.cpp
+    MatrixxEx1b.h
+    MatrixxEx1b.cpp
+
+Para o exercicio 1c:
+    MatrixEx1c.h
+    MatrixEx1c.cpp
+    MatrixbEx1c.h
+    MatrixbEx1c.cpp
+    MatrixxEx1c.h
+    MatrixxEx1c.cpp
+
+Para o exercicio 1d:
+    MatrixEx1d.h
+    MatrixEx1d.cpp
+    MatrixbEx1d.h
+    MatrixbEx1d.cpp
+    MatrixxEx1d.h
+    MatrixxEx1d.cpp
+
+Para os exercicios seguintes:
+    NullMatrix.h
+    NullMatrix.cpp
+    RandomPositiveMatrix.h
+    RandomPositiveMatrix.cpp
+    UserGeneratedMatrix.h
+    UserGeneratedMatrix.cpp
+
+O programa deve ser compilado com g++ em concordancia com a versao C++11 (-std=c++11) e com a flag de otimizacao -O2, para acelerar o processo.

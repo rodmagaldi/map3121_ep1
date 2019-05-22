@@ -920,7 +920,7 @@ int main() {
 
     //exercicioDois();
 
-    //exercicioTres();
+    exercicioTres();
 
     return 0;
 }
