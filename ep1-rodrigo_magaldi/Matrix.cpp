@@ -13,37 +13,9 @@ using namespace std;
 
 //construtor a partir de numero de linhas e colunas predefinidos
 Matrix::Matrix(int linhas, int colunas, int precisao){
-
-    //guarda as informacoes de numero de linhas e colunas
-    //para terem facil acesso
     this->nLinhas = linhas;
     this->nColunas = colunas;
     this->precisao = precisao;
-
-//    cout << "Matriz com " << this->nLinhas << " linhas e " << this->nColunas << " colunas: " << endl;
-//    cout << endl;
-//
-//    loop que coloca os valores em this->matriz
-//    for (int i=0; i<nLinhas; i++) {
-//
-//        inicializa vetores dentro do vetor principal
-//        vector<double> temp;
-//
-//        loop que  adiciona valores ao vetor interno
-//        for (int j=0; j<nColunas; j++) {
-//
-//            inicializa cada valor a ser colocado no vetor interno
-//            int ntemp;
-//            cout << "Elemento da linha " << i << " e coluna " << j << ": ";
-//            cin >> ntemp;
-//
-//            coloca o valor obtido no vetor interno
-//            temp.push_back(ntemp);
-//        }
-//
-//        coloca o vetor interno dentro do vetor externo (adiciona linhas a matriz)
-//        matriz.push_back(temp);
-//   }
 }
 
 //destrutor
@@ -62,8 +34,6 @@ int Matrix::getNColunas() {
 
 //imprime this->matriz de forma legivel
 void Matrix::print() {
-    cout << "Matriz: " << endl;
-
     //loop que realiza a impressao
     for (int i = 0; i < this->nLinhas; i++) {
         cout << "| ";
@@ -141,6 +111,7 @@ void Matrix::rotGivens(int i, int j, double c, double s) {
     }
 }
 
+//metodo que resolve um unico sistema linear Wx = b, segundo o algoritmo apresentado
 void Matrix::resolveSistema(Matrix* b, Matrix* x) {
     for (int k=this->nColunas-1; k>=0; k--) {
         x->matriz[k][0] = b->matriz[k][0];
@@ -151,6 +122,7 @@ void Matrix::resolveSistema(Matrix* b, Matrix* x) {
     }
 }
 
+//metodo que resolve multiplos sistemas lineares WH = A, segundo o algoritmo apresentado
 void Matrix::resolveMultiplosSistemas(Matrix* a, Matrix* h) {
     for (int k=this->nColunas-1; k>=0; k--) {
         for (int j=0; j<a->getNColunas(); j++) {
@@ -163,6 +135,7 @@ void Matrix::resolveMultiplosSistemas(Matrix* a, Matrix* h) {
     }
 }
 
+//metodo que multiplica a matriz por outra matriz m, obtendo uma outra como resultado
 Matrix* Matrix::multiplica(Matrix* m) {
     Matrix* resolvida = new Matrix(this->nLinhas, m->getNColunas(), this->precisao);
 
@@ -181,6 +154,7 @@ Matrix* Matrix::multiplica(Matrix* m) {
     return resolvida;
 }
 
+//metodo que calcula a diferenca entre a matriz e outra matriz m
 double Matrix::calculaDiferenca(Matrix* m) {
     double soma = 0;
 
@@ -193,6 +167,7 @@ double Matrix::calculaDiferenca(Matrix* m) {
     return soma;
 }
 
+//metodo que realiza a subtracao entre a matriz e outra matriz m, retornando a matriz resposta
 Matrix* Matrix::subtrai(Matrix* m) {
 
     Matrix* resposta = new Matrix(this->nLinhas, this->nColunas, this->precisao);
@@ -208,6 +183,7 @@ Matrix* Matrix::subtrai(Matrix* m) {
    return resposta;
 }
 
+//metodo que gera uma matriz transposta
 Matrix* Matrix::transpoe() {
     Matrix* transposta = new Matrix(this->nColunas, this->nLinhas, this->precisao);
     for (int i=0; i<transposta->nLinhas; i++) {
@@ -221,6 +197,7 @@ Matrix* Matrix::transpoe() {
    return transposta;
 }
 
+//metodo que gera uma copia da matriz, utilizado para evitar problemas de referencia
 Matrix* Matrix::geraCopia() {
     Matrix* copia = new Matrix(this->nLinhas, this->nColunas, this->precisao);
     for (int i=0; i<nLinhas; i++) {

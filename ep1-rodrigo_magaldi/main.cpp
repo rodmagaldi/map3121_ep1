@@ -1,155 +1,292 @@
+/*
+Este exercicio programa foi desenvolvido com base numa classe Matrix que centraliza algumas
+operacoes realizadas com matrizes. Essa classe e' utilizada como classe pai para as classes
+que inicializam as matrizes relativas 'a primeira tarefa, as quais tem um algoritmo especifico
+para preenchimento de seus valores. Alem disso, ha' as classes NullMatrix, que gera uma matriz
+nula, RandomPositiveMatrix, que gera uma matriz aleatoria com valores positivos, e
+UserGeneratedMatrix, que inicializa uma matriz com valores digitados pelo usuario, todas subclasses
+de Matrix.
+
+Dessa forma, este EP possui os seguintes 33 arquivos:
+
+main.cpp
+Matrix.h
+Matrix.cpp
+
+Para o exercicio 1a:
+    MatrixEx1a.h
+    MatrixEx1a.cpp
+    MatrixbEx1a.h
+    MatrixbEx1a.cpp
+    MatrixxEx1a.h
+    MatrixxEx1a.cpp
+
+Para o exercicio 1b:
+    MatrixEx1b.h
+    MatrixEx1b.cpp
+    MatrixbEx1b.h
+    MatrixbEx1b.cpp
+    MatrixxEx1b.h
+    MatrixxEx1b.cpp
+
+Para o exercicio 1c:
+    MatrixEx1c.h
+    MatrixEx1c.cpp
+    MatrixbEx1c.h
+    MatrixbEx1c.cpp
+    MatrixxEx1c.h
+    MatrixxEx1c.cpp
+
+Para o exercicio 1d:
+    MatrixEx1d.h
+    MatrixEx1d.cpp
+    MatrixbEx1d.h
+    MatrixbEx1d.cpp
+    MatrixxEx1d.h
+    MatrixxEx1d.cpp
+
+Para os exercicios seguintes:
+    NullMatrix.h
+    NullMatrix.cpp
+    RandomPositiveMatrix.h
+    RandomPositiveMatrix.cpp
+    UserGeneratedMatrix.h
+    UserGeneratedMatrix.cpp
+*/
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <math.h>
 #include "Matrix.h"
 
+//inclui as classes utilizadas no exercicio 1a
 #include "MatrixEx1a.h"
 #include "MatrixbEx1a.h"
 #include "MatrixxEx1a.h"
 
+//inclui as classes utilizadas no exercicio 1a
 #include "MatrixEx1b.h"
 #include "MatrixbEx1b.h"
 #include "MatrixxEx1b.h"
 
+//inclui as classes utilizadas no exercicio 1a
 #include "MatrixwEx1c.h"
 #include "MatrixaEx1c.h"
 #include "MatrixhEx1c.h"
 
+//inclui as classes utilizadas no exercicio 1a
 #include "MatrixwEx1d.h"
 #include "MatrixaEx1d.h"
 #include "MatrixhEx1d.h"
 
+//inclui as classes utilizadas no exercicio 1a
 #include "RandomPositiveMatrix.h"
 #include "UserGeneratedMatrix.h"
 #include "NullMatrix.h"
 
-#define CASAS_DECIMAIS 6
+//define alguns parametros a serem utilizados na segunda tarefa
+//CASAS_DECIMAIS define o numero de casas decimais mostradas quando as matrizes sao impressas no consoles
+#define CASAS_DECIMAIS 3
+//epsilon define a condicao de para do loop principal
 #define EPSILON 0.00001
+//itmax define o numero de iteracoes maximo do loop principal
 #define ITMAX 100
 
+
+//faz alguns passos necessario para o terceiro exercicio
+//possibilita a leitura de arquivos
 #include <fstream>
 #include <sstream>
+//define o numero de imagens usadas no treino: este parametro deve ser modificado para uso na tarefa principal
 #define NDIG_TREINO 4000
+//define o numero de componentes usadas no treino: este parametro deve ser modificado para uso na tarefa principal
 #define COMPONENTES_DESEJADOS 15
+//define o numero de imagens testadas: nao modificar este parametro, pois todas as imagens deve ser testadas
 #define N_TEST 10000
 
 using namespace std;
 
+//funcao que executa o exercicio 1a
 void exercicioUmA() {
 
     cout << "===== Bem vindo ao exercicio 1a =====" << endl << endl;
     cout << endl;
 
     MatrixEx1a* w = new MatrixEx1a(CASAS_DECIMAIS);
+    Matrix* wCopia = w->geraCopia();
+
     MatrixbEx1a* b = new MatrixbEx1a(CASAS_DECIMAIS);
+
     MatrixxEx1a* x = new MatrixxEx1a(CASAS_DECIMAIS);
 
-    w->fatoracaoQR(b);
-    w->resolveSistema(b, x);
-
+    cout << "Matrizes iniciais:" << endl << endl;
+    cout << "W:" << endl;
     w->print();
+
+    cout << "b:" << endl;
     b->print();
+
+    cout << "x:" << endl;
     x->print();
 
-    Matrix* a = w->multiplica(x);
+    cout << "Realizando fatoracao..." << endl;
+    w->fatoracaoQR(b);
 
-    a->print();
+    cout << "Resolvendo o sistema..." << endl;
+    w->resolveSistema(b, x);
+
+    cout << "Resultado obtido x:" << endl;
+    x->print();
+
+    cout << "Resultado da multiplicacao Wx (deveria ser igual a b)" << endl;
+    Matrix* mult = wCopia->multiplica(x);
+
+    mult->print();
 
     delete w;
     delete x;
     delete b;
+    delete mult;
+
+    cout << "===== Fim do exercicio 1a! =====" << endl;
 }
 
+//funcao que executa o exercicio 1b
 void exercicioUmB() {
 
     cout << "===== Bem vindo ao exercicio 1b =====" << endl << endl;
     cout << endl;
 
     MatrixEx1b* w = new MatrixEx1b(CASAS_DECIMAIS);
+    Matrix* wCopia = w->geraCopia();
+
     MatrixbEx1b* b = new MatrixbEx1b(CASAS_DECIMAIS);
+
     MatrixxEx1b* x = new MatrixxEx1b(CASAS_DECIMAIS);
 
+    cout << "Matrizes iniciais:" << endl << endl;
+    cout << "W:" << endl;
     w->print();
+
+    cout << "b:" << endl;
     b->print();
+
+    cout << "x:" << endl;
     x->print();
 
+    cout << "Realizando fatoracao..." << endl;
     w->fatoracaoQR(b);
+
+    cout << "Resolvendo o sistema..." << endl;
     w->resolveSistema(b, x);
 
-    w->print();
-    b->print();
+    cout << "Resultado obtido x:" << endl;
     x->print();
 
-    Matrix* mult = w->multiplica(x);
+    cout << "Resultado da multiplicacao Wx (deveria se aproximar de b)" << endl;
+    Matrix* mult = wCopia->multiplica(x);
+
     mult->print();
 
     delete w;
     delete x;
     delete b;
     delete mult;
+
+    cout << "===== Fim do exercicio 1b! =====" << endl;
 }
 
+//funcao que executa o exercicio 1a
 void exercicioUmC() {
 
     cout << "===== Bem vindo ao exercicio 1c =====" << endl << endl;
     cout << endl;
 
     MatrixwEx1c* w = new MatrixwEx1c(CASAS_DECIMAIS);
+    Matrix* wCopia = w->geraCopia();
+
     MatrixaEx1c* a = new MatrixaEx1c(CASAS_DECIMAIS);
     MatrixhEx1c* h = new MatrixhEx1c(CASAS_DECIMAIS);
 
+    cout << "Matrizes iniciais:" << endl << endl;
+    cout << "W:" << endl;
     w->print();
+
+    cout << "A:" << endl;
     a->print();
+
+    cout << "H:" << endl;
     h->print();
 
+    cout << "Realizando fatoracao..." << endl;
     w->fatoracaoQR(a);
+
+    cout << "Resolvendo o sistema..." << endl;
     w->resolveMultiplosSistemas(a, h);
 
-    w->print();
-    a->print();
+    cout << "Resultado obtido H:" << endl;
     h->print();
 
-    Matrix* mult = w->multiplica(h);
+    cout << "Resultado da multiplicacao WH (deveria ser igual a A)" << endl;
+    Matrix* mult = wCopia->multiplica(h);
+
     mult->print();
 
     delete w;
-    delete a;
     delete h;
+    delete a;
     delete mult;
+
+    cout << "===== Fim do exercicio 1c! =====" << endl;
 
 }
 
+//funcao que executa o exercicio 1a
 void exercicioUmD() {
 
     cout << "===== Bem vindo ao exercicio 1d =====" << endl << endl;
     cout << endl;
 
     MatrixwEx1d* w = new MatrixwEx1d(CASAS_DECIMAIS);
+    Matrix* wCopia = w->geraCopia();
+
     MatrixaEx1d* a = new MatrixaEx1d(CASAS_DECIMAIS);
     MatrixhEx1d* h = new MatrixhEx1d(CASAS_DECIMAIS);
 
+    cout << "Matrizes iniciais:" << endl << endl;
+    cout << "W:" << endl;
     w->print();
+
+    cout << "A:" << endl;
     a->print();
+
+    cout << "H:" << endl;
     h->print();
 
+    cout << "Realizando fatoracao..." << endl;
     w->fatoracaoQR(a);
+
+    cout << "Resolvendo o sistema..." << endl;
     w->resolveMultiplosSistemas(a, h);
 
-    w->print();
-    a->print();
+    cout << "Resultado obtido H:" << endl;
     h->print();
 
-    Matrix* mult = w->multiplica(h);
+    cout << "Resultado da multiplicacao WH (deveria ser igual a A)" << endl;
+    Matrix* mult = wCopia->multiplica(h);
+
     mult->print();
 
     delete w;
-    delete a;
     delete h;
+    delete a;
     delete mult;
 
+    cout << "===== Fim do exercicio 1d! =====" << endl;
 }
 
+//funcao auxiliar que normaliza as colunas de uma matriz passada como parametro
 void auxiliarNormalizaColunas(Matrix* m) {
 
     for (int j=0; j<m->getNColunas(); j++) {
@@ -169,6 +306,7 @@ void auxiliarNormalizaColunas(Matrix* m) {
 
 }
 
+//funcao auxiliar que modifica os numeros negativos de uma matriz para 0
 void auxiliarTornaPositivo(Matrix* m) {
     for (int i=0; i<m->getNLinhas(); i++) {
         for (int j=0; j<m->getNColunas(); j++) {
@@ -179,6 +317,7 @@ void auxiliarTornaPositivo(Matrix* m) {
     }
 }
 
+//funcao que executa o exercicio 2
 void exercicioDois() {
     cout << "===== Bem vindo ao exercicio 2 =====" << endl << endl;
 
@@ -269,9 +408,6 @@ void exercicioDois() {
         delete mult;
 
         mult = w->multiplica(h);
-
-        cout << contador << " ";
-
     }
 
     w->print();
@@ -284,6 +420,7 @@ void exercicioDois() {
     cout << "Erro: " << erro << endl;
 }
 
+//funcao auxiliar que le os arquivos de treino
 Matrix* auxiliarLeArquivoTreino(int digito, int quant) {
     ifstream file;
     string dir = "dados_mnist/train_dig" + to_string(digito) + ".txt";
@@ -312,6 +449,7 @@ Matrix* auxiliarLeArquivoTreino(int digito, int quant) {
     return matrizArquivo;
 }
 
+//funcao auxiliar que le o arquivo de teste
 Matrix* auxiliarLeArquivoTeste(string path, int quant) {
     ifstream file;
     string dir = path;
@@ -340,6 +478,7 @@ Matrix* auxiliarLeArquivoTeste(string path, int quant) {
     return matrizArquivo;
 }
 
+//funcao auxiliar que le o arquivo de respostas reais dos testes
 vector<int> auxiliarLeArquivoRespostas(string path) {
     ifstream file;
     string dir = path;
@@ -365,6 +504,7 @@ vector<int> auxiliarLeArquivoRespostas(string path) {
     return respostas;
 }
 
+//funcao auxiliar que realiza o treino de cada digito na tarefa principal
 Matrix* auxiliarTreino(int digito) {
 
     Matrix* treinoA = auxiliarLeArquivoTreino(digito, NDIG_TREINO);
@@ -445,6 +585,7 @@ Matrix* auxiliarTreino(int digito) {
     return w;
 }
 
+//funcao auxiliar que calculo o erro da matriz diferenca passada na tarefa principal
 vector<double> auxiliarCalculaErro(Matrix* m) {
     vector<double> erros;
     double soma;
@@ -459,6 +600,7 @@ vector<double> auxiliarCalculaErro(Matrix* m) {
     return erros;
 }
 
+//funcao que executa a tarefa principal do EP
 void exercicioTres() {
 
     //define as matrix Wd para cada digito
@@ -654,6 +796,7 @@ void exercicioTres() {
     //le o arquivo de valores reais e armazena num outro vetor
     vector<int> valoresReais = auxiliarLeArquivoRespostas("dados_mnist/respostas.txt");
 
+    //inicializa os valores de acertos totais, para cada digito e numero total de aparicoes de cada digito
     int certos = 0;
 
     int n0 = 0;
@@ -678,7 +821,7 @@ void exercicioTres() {
     int certos8 = 0;
     int certos9 = 0;
 
-
+    //loop que checa as taxas de acertos totais e para cada digito
     for (unsigned i=1; i<valoresReais.size(); i++) {
         if (valoresReais[i] == 0) {
             n0++;
@@ -752,8 +895,8 @@ void exercicioTres() {
         }
     }
 
+    //imprime no console os valores obtidos de taxas de acerto
     cout << "Acertos: " << certos << endl << "Total: " << valoresReais.size() << endl << "Porcentagem de acertos: " << (double)100*certos/valoresReais.size() << "%" << endl << endl;
-
     cout << "Acertos 0: " << certos0 << endl << "Total: " << n0 << endl << "Porcentagem de acertos: " << (double)100*certos0/n0 << "%" << endl << endl;
     cout << "Acertos 1: " << certos1 << endl << "Total: " << n1 << endl << "Porcentagem de acertos: " << (double)100*certos1/n1 << "%" << endl << endl;
     cout << "Acertos 2: " << certos2 << endl << "Total: " << n2 << endl << "Porcentagem de acertos: " << (double)100*certos2/n2 << "%" << endl << endl;
@@ -767,6 +910,7 @@ void exercicioTres() {
 
     }
 
+//no main, o exercicio desejado deve ser descomentado para ser executado
 int main() {
 
     //exercicioUmA();
@@ -776,26 +920,7 @@ int main() {
 
     //exercicioDois();
 
-    exercicioTres();
-
-//    UserGeneratedMatrix* aAux = new UserGeneratedMatrix(3, 3, CASAS_DECIMAIS);
-//    Matrix* a = dynamic_cast<Matrix*>(aAux);
-//
-//    UserGeneratedMatrix* bAux = new UserGeneratedMatrix(3, 3, CASAS_DECIMAIS);
-//    Matrix* b = dynamic_cast<Matrix*>(bAux);
-//
-//    Matrix* c = a->multiplica(b);
-//
-//    Matrix* d = a->subtrai(c);
-//
-//    c->print();
-//    d->print();
-//
-//    vector<double> erros = auxiliarCalculaErro(d);
-//
-//    for (int i=0; i<erros.size(); i++) {
-//        cout << erros[i] << endl;
-//    }
+    //exercicioTres();
 
     return 0;
 }
