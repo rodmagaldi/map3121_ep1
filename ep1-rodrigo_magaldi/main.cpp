@@ -99,9 +99,9 @@ Para os exercicios seguintes:
 #include <fstream>
 #include <sstream>
 //define o numero de imagens usadas no treino: este parametro deve ser modificado para uso na tarefa principal
-#define NDIG_TREINO 4000
+#define NDIG_TREINO 100
 //define o numero de componentes usadas no treino: este parametro deve ser modificado para uso na tarefa principal
-#define COMPONENTES_DESEJADOS 15
+#define COMPONENTES_DESEJADOS 5
 //define o numero de imagens testadas: nao modificar este parametro, pois todas as imagens deve ser testadas
 #define N_TEST 10000
 
@@ -149,7 +149,7 @@ void exercicioUmA() {
     delete b;
     delete mult;
 
-    cout << "===== Fim do exercicio 1a! =====" << endl;
+    cout << "===== Fim do exercicio 1a! =====" << endl << endl;
 }
 
 //funcao que executa o exercicio 1b
@@ -194,7 +194,7 @@ void exercicioUmB() {
     delete b;
     delete mult;
 
-    cout << "===== Fim do exercicio 1b! =====" << endl;
+    cout << "===== Fim do exercicio 1b! =====" << endl << endl;
 }
 
 //funcao que executa o exercicio 1a
@@ -238,7 +238,7 @@ void exercicioUmC() {
     delete a;
     delete mult;
 
-    cout << "===== Fim do exercicio 1c! =====" << endl;
+    cout << "===== Fim do exercicio 1c! =====" << endl << endl;
 
 }
 
@@ -283,7 +283,7 @@ void exercicioUmD() {
     delete a;
     delete mult;
 
-    cout << "===== Fim do exercicio 1d! =====" << endl;
+    cout << "===== Fim do exercicio 1d! =====" << endl << endl;
 }
 
 //funcao auxiliar que normaliza as colunas de uma matriz passada como parametro
@@ -348,31 +348,33 @@ void exercicioDois() {
 
     //copia matriz a
     Matrix* aCopia = a->geraCopia();
-    aCopia->print();
 
     //gera matriz aleatoria positiva w
     RandomPositiveMatrix* wAux = new RandomPositiveMatrix(n, p, CASAS_DECIMAIS);
     Matrix* w = dynamic_cast<Matrix*>(wAux);
-    cout << "Matriz W:" << endl;
+    cout << "Matriz W inicial:" << endl;
     w->print();
 
     //gera matriz nula h que sera resolvida
     NullMatrix* hAux = new NullMatrix(p, m, CASAS_DECIMAIS);
     Matrix* h = dynamic_cast<Matrix*>(hAux);
-    cout << "Matriz H:" << endl;
+    cout << "Matriz H inicial:" << endl;
     h->print();
 
+    //gera matrizes que sao utilizadas para averiguar condicao de parada da iteracao
     RandomPositiveMatrix* multAux = new RandomPositiveMatrix(n, m, CASAS_DECIMAIS);
     Matrix* mult = dynamic_cast<Matrix*>(multAux);
-
     Matrix* multAnterior = w->multiplica(h);
 
+    //loop principal da fatoracao WH
     for(int contador = 0; contador < ITMAX && fabs(aCopia->calculaDiferenca(mult) - aCopia->calculaDiferenca(multAnterior)) > EPSILON; contador++) {
 
+        //redefine a para aOriginal
         a = aCopia->geraCopia();
 
         auxiliarNormalizaColunas(w);
 
+        //encontra os novos valores de H
         w->fatoracaoQR(a);
         w->resolveMultiplosSistemas(a, h);
 
@@ -380,44 +382,49 @@ void exercicioDois() {
 
         delete a;
 
+        //gera aTransposta a partir da aOriginal e hTransposta a partir da H obtida
         a = aCopia->geraCopia();
         Matrix* aTransposta = a->transpoe();
-
         Matrix* hTransposta = h->transpoe();
 
+        //inicializa matriz wTransposta a ser redefinida
         NullMatrix* wTranspostaAux = new NullMatrix(p, n, CASAS_DECIMAIS);
         Matrix* wTransposta = dynamic_cast<Matrix*>(wTranspostaAux);
 
+        //encontra os novos valores de W a partir de wTransposta
         hTransposta->fatoracaoQR(aTransposta);
         hTransposta->resolveMultiplosSistemas(aTransposta, wTransposta);
-
         w = wTransposta->transpoe();
 
         auxiliarTornaPositivo(w);
 
+        //realiza delecoes de matrizes que nao serao mais necessarias para nao ocupar espaco na memoria
         delete a;
-
         delete aTransposta;
         delete hTransposta;
         delete wTransposta;
 
+        //redefine mult e multAnterior para atualizar a condicao de parada
         delete multAnterior;
-
         multAnterior = mult->geraCopia();
-
         delete mult;
-
         mult = w->multiplica(h);
     }
 
+    cout << "W:" << endl;
     w->print();
+
+    cout << "H:" << endl;
     h->print();
 
+    cout << "W x H (deve se aproximar de A):" << endl;
     mult->print();
 
     double erro = fabs(aCopia->calculaDiferenca(mult) - aCopia->calculaDiferenca(multAnterior));
 
     cout << "Erro: " << erro << endl;
+
+    cout << "===== Fim do exercicio 2! =====" << endl << endl;
 }
 
 //funcao auxiliar que le os arquivos de treino
@@ -504,40 +511,46 @@ vector<int> auxiliarLeArquivoRespostas(string path) {
     return respostas;
 }
 
-//funcao auxiliar que realiza o treino de cada digito na tarefa principal
+//funcao auxiliar que realiza o treino de cada digito na tarefa principal, por meio da fatoracao WH - como no exercicio 2
 Matrix* auxiliarTreino(int digito) {
 
+    //gera matriz a e sua copia
     Matrix* treinoA = auxiliarLeArquivoTreino(digito, NDIG_TREINO);
     Matrix* treinoACopia = treinoA->geraCopia();
 
+    //gera matriz aleatoria positiva w
     RandomPositiveMatrix* wAux = new RandomPositiveMatrix(784, COMPONENTES_DESEJADOS, CASAS_DECIMAIS);
     Matrix* w = dynamic_cast<Matrix*>(wAux);
 
+    //gera matriz nula h que sera resolvida
     NullMatrix* hAux = new NullMatrix(COMPONENTES_DESEJADOS, NDIG_TREINO, CASAS_DECIMAIS);
     Matrix* h = dynamic_cast<Matrix*>(hAux);
 
+    //define parametros n, m e p para a fatoracao a ser realizada
     int n = treinoA->getNLinhas();
     int m = NDIG_TREINO;
     int p = COMPONENTES_DESEJADOS;
 
+    //gera matrizes que sao utilizadas para averiguar condicao de parada da iteracao
     RandomPositiveMatrix* multAux = new RandomPositiveMatrix(n, m, CASAS_DECIMAIS);
     Matrix* mult = dynamic_cast<Matrix*>(multAux);
-
     Matrix* multAnterior = w->multiplica(h);
 
     cout << "Treinando digito " << digito << "..." << endl;
 
     cout << "Iteracao ";
 
-    for(int contador = 0; contador<ITMAX &&
-                        fabs(treinoACopia->calculaDiferenca(mult) - treinoACopia->calculaDiferenca(multAnterior))/treinoACopia->calculaDiferenca(mult) > EPSILON; contador++) {
+    //loop principal da fatoracao WH
+    for(int contador = 0; contador<ITMAX && fabs(treinoACopia->calculaDiferenca(mult) - treinoACopia->calculaDiferenca(multAnterior))/treinoACopia->calculaDiferenca(mult) > EPSILON; contador++) {
 
         cout << contador << " ";
 
+        //redefine a para aOriginal
         treinoA = treinoACopia->geraCopia();
 
         auxiliarNormalizaColunas(w);
 
+        //encontra os novos valores de H
         w->fatoracaoQR(treinoA);
         w->resolveMultiplosSistemas(treinoA, h);
 
@@ -545,33 +558,32 @@ Matrix* auxiliarTreino(int digito) {
 
         delete treinoA;
 
+        //gera aTransposta a partir da aOriginal e hTransposta a partir da H obtida
         treinoA = treinoACopia->geraCopia();
         Matrix* aTransposta = treinoA->transpoe();
-
         Matrix* hTransposta = h->transpoe();
 
+        //inicializa matriz wTransposta a ser redefinida
         NullMatrix* wTranspostaAux = new NullMatrix(p, n, CASAS_DECIMAIS);
         Matrix* wTransposta = dynamic_cast<Matrix*>(wTranspostaAux);
 
+        //encontra os novos valores de W a partir de wTransposta
         hTransposta->fatoracaoQR(aTransposta);
         hTransposta->resolveMultiplosSistemas(aTransposta, wTransposta);
-
         w = wTransposta->transpoe();
 
         auxiliarTornaPositivo(w);
 
+        //realiza delecoes de matrizes que nao serao mais necessarias para nao ocupar espaco na memoria
         delete treinoA;
-
         delete aTransposta;
         delete hTransposta;
         delete wTransposta;
 
+        //redefine mult e multAnterior para atualizar a condicao de parada
         delete multAnterior;
-
         multAnterior = mult->geraCopia();
-
         delete mult;
-
         mult = w->multiplica(h);
     }
 
@@ -602,6 +614,10 @@ vector<double> auxiliarCalculaErro(Matrix* m) {
 
 //funcao que executa a tarefa principal do EP
 void exercicioTres() {
+
+    cout << "===== Bem vindo ao exercicio 3 =====" << endl;
+
+    cout << "Hiperparametros utilizados: ndig_treino = " << NDIG_TREINO << " e p = " << COMPONENTES_DESEJADOS << "." << endl << endl;
 
     //define as matrix Wd para cada digito
     Matrix* w0 = auxiliarTreino(0);
@@ -664,7 +680,7 @@ void exercicioTres() {
 
     cout << "Iniciando classificacao..." << endl << endl;
 
-    //resolve as fatoracoes Wd*Hd = Ad
+    //resolve as fatoracoes Wd*Hd = Ad, encontrando Hd
     w0->fatoracaoQR(a0);
     w0->resolveMultiplosSistemas(a0, h0);
     delete a0;
@@ -908,7 +924,9 @@ void exercicioTres() {
     cout << "Acertos 8: " << certos8 << endl << "Total: " << n8 << endl << "Porcentagem de acertos: " << (double)100*certos8/n8 << "%" << endl << endl;
     cout << "Acertos 9: " << certos9 << endl << "Total: " << n9 << endl << "Porcentagem de acertos: " << (double)100*certos9/n9 << "%" << endl << endl;
 
-    }
+    cout << "===== Fim do exercicio 3! =====" << endl << endl;
+
+}
 
 //no main, o exercicio desejado deve ser descomentado para ser executado
 int main() {

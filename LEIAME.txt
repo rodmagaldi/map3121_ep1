@@ -1,3 +1,8 @@
+Desenvolvido por :
+
+Gustavo Oliveira Kanto  - 10379669
+Rodrigo Miksian Magaldi - 10274224
+
 O exercicio programa foi desenvolvido no IDE CodeBlocks, e por conta disso o projeto no formato especifico para o CodeBlocks foi enviado junto com o codigo-fonte. 
 Por alguma razao, o CodeBlocks, por vezes, nao inclui todas as classes no projeto, entao se for rodar o codigo nessa IDE ter certeza de que todos os arquivos estao no projeto.
 
@@ -54,5 +59,9 @@ Para os exercicios seguintes:
     RandomPositiveMatrix.cpp
     UserGeneratedMatrix.h
     UserGeneratedMatrix.cpp
+
+Para executar algum exercicio, a funcao main presente no arquivo main.cpp deve ser modificada, de modo a DESCOMENTAR a funcao que realiza tal exercicio.
+No segundo exercicio, os valores desejados devem ser inseridos pelo usuario.
+Para mudar os hiperparametros do terceiro exercicio, e' necessario mudar os valores definidos no inicio do main.cpp pelos #define realizados.
 
 O programa deve ser compilado com g++ em concordancia com a versao C++11 (-std=c++11) e com a flag de otimizacao -O2, para acelerar o processo.
